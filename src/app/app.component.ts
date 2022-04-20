@@ -1,5 +1,6 @@
 import {AfterViewInit, Component, OnInit} from '@angular/core';
-import {FormService} from './services/form.service';
+import {FilterService} from './services/filter.service';
+import {Filter} from './model/Filter';
 
 export interface KeyValue{
   key: string;
@@ -13,17 +14,16 @@ export interface KeyValue{
 })
 export class AppComponent implements OnInit, AfterViewInit{
 
-  fields: any = null;
+  filters: Filter[] = [];
 
-  constructor(private formService: FormService){}
+  constructor(private filterService: FilterService){}
 
   ngOnInit(): void {
-    this.fields = Object.values(this.formService.fieldStructures);
+    this.filters = this.filterService.filters;
   }
 
   ngAfterViewInit(): void {
-    this.formService.loadApp();
+    this.filterService.loadApp(); //load up the first filter
   }
-
 
 }

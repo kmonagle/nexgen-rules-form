@@ -1,13 +1,13 @@
 import { TestBed } from '@angular/core/testing';
 
-import { ContextService } from './context.service';
+import { HandlerService } from './handler.service';
 
-describe('ContextService', () => {
-  let service: ContextService;
+describe('HandlerService', () => {
+  let service: HandlerService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({});
-    service = TestBed.inject(ContextService);
+    service = TestBed.inject(HandlerService);
   });
 
   it('should be created', () => {

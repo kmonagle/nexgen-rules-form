@@ -12,6 +12,8 @@
 // }
 // }
 
+import {DataSources} from './constants';
+
 export interface FormFieldDataParam {
   name: string;
 }
@@ -19,18 +21,7 @@ export interface FormFieldDataParam {
 export interface FormFieldData {
   pinboardGUID: string;
   param: FormFieldDataParam;
-}
-
-export interface FormField {
-  name: string;
-  type: string,
-  multi: boolean,
-  label: string,
-  required: boolean,
-  data: FormFieldData;
-  initialValue: string;
-  disabled: boolean;
-  lifecycle?: string
+  type: string
 }
 
 export interface FilterConfig {
@@ -42,7 +33,7 @@ export interface FilterConfig {
   data: FormFieldData;
   initialValue: string;
   disabled: boolean;
-  lifecycle?: string
+  handler?: string
 }
 
 export interface LifecycleData {

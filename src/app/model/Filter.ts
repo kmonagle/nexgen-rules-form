@@ -1,28 +1,45 @@
-import {FilterConfig, LifecycleData} from './FormField';
-import {AbstractControl, FormControl} from '@angular/forms';
+import {FilterConfig} from './interfaces';
+import {FormControl} from '@angular/forms';
 import {KeyValue} from '../app.component';
 import {BehaviorSubject, Observable} from 'rxjs/index';
-import {getLifeCycle} from '../services/LifecycleServiceFactory';
-import {ContextService} from '../services/context.service';
-import {ThoughtspotService} from '../services/thoughtspot.service';
+import {FilterService} from '../services/filter.service';
 
 export class Filter{
 
   name: string;
   config: FilterConfig;
-  control: AbstractControl;
+  control: FormControl;
   _dataSubject: BehaviorSubject<KeyValue[] | null>;
-  _dataStream: Observable<KeyValue[] | null>;
-  lifecycle: LifecycleData;
+  dataStream: Observable<KeyValue[] | null>;
+  index: number;
+  isCurrent: boolean;
+  isFirst: boolean;
 
-
-  constructor(filterData: FilterConfig, cs: ContextService, ts: ThoughtspotService){
+  constructor(filterData: FilterConfig, index: number, private fs: FilterService){
     this.name = filterData.name;
+    this.index = index;
     this.config = filterData;
     this.control = new FormControl({value: filterData.initialValue, disabled: filterData.disabled});
     this._dataSubject = new BehaviorSubject<KeyValue[] | null>(null);
-    this._dataStream = this._dataSubject.asObservable();
-    this.lifecycle = getLifeCycle(cs, ts, filterData.lifecycle);
+    this.dataStream = this._dataSubject.asObservable();
+    this.isCurrent = false;
+    this.isFirst = (index === 0);
   }
 
+  populate(data: KeyValue[]){
+    console.log('populating: ', data);
+    this._dataSubject.next(data)
+  }
+
+  getFormer(): Filter[]{
+    return this.fs.getFormer(this);
+  }
+
+  getLatter(): Filter[]{
+    return this.fs.getLatter(this);
+  }
+
+  getNext(): Filter{
+    return this.fs.getNext(this);
+  }
 }

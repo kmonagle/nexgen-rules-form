@@ -1,37 +1,33 @@
-import {ContextService} from './context.service';
 import {take, tap} from 'rxjs/operators';
 import {Observable} from 'rxjs/index';
 import {of} from 'rxjs/internal/observable/of';
-import {FieldStructure} from './form.service';
-import {ThoughtspotService} from './thoughtspot.service';
+import {FilterService} from './filter.service';
+import {Filter} from '../model/Filter';
+import {LifecycleData} from '../model/interfaces';
 
-const getDefault = (cs: ContextService, ts: ThoughtspotService) => {
+const getDefault = (fs: FilterService): LifecycleData => {
 
   return {
     clearFields: (): Observable<any> => {
-      cs.msgs.info("Clearing Fields!!");
-      const latterFields: FieldStructure[] = cs.getLatter();
+      const latterFields: Filter[] = fs.getLatter(fs.getCurrent());
       latterFields.forEach(latterField => latterField.control.reset());
       return of(true);
     },
 
     disableFields: (): Observable<any> => {
-      cs.msgs.info("Disable Fields!!");
-      const latterFields: FieldStructure[] = cs.getLatter();
+      const latterFields: Filter[] = fs.getLatter(fs.getCurrent());
       latterFields.forEach(latterField => latterField.control.disable());
       return of(true);
     },
 
     loadData: ():Observable<any> => {
-      cs.msgs.info("Loading Data!!");
-      const next:FieldStructure = cs.getNext();
+      const next:Filter = fs.getNext(fs.getCurrent());
 
       if(next){
-        const {config, dataSubject} = next;
-        return ts.getData(config.data.pinboardGUID, cs.getFormer()).pipe(
+        return fs.getDataSource(next).pipe(
           take(1),
           tap((data) => console.log('data from ts: ', data)),
-          tap( data => dataSubject.next(data))
+          tap( data => next.populate(data))
         )
       } else {
         return of(null);
@@ -39,18 +35,17 @@ const getDefault = (cs: ContextService, ts: ThoughtspotService) => {
     },
 
     handleSpecialCounts: ():Observable<any> => {
-      cs.msgs.info("Handling Special Counts!!");
-      const next:FieldStructure = cs.getNext();
+      const next:Filter = fs.getNext(fs.getCurrent());
 
       if(next){
         return next.dataStream.pipe(
           take(1),
           tap((vals) => console.log('special count vals: ', vals)),
           tap((vals) => {
-            if(vals.length > 0){
+            if(vals && vals.length > 0){
               next.control.enable();
             }
-            if(vals.length === 1){
+            if(vals && vals.length === 1){
               next.control.setValue(vals[0].key);
             }
           })
@@ -62,11 +57,9 @@ const getDefault = (cs: ContextService, ts: ThoughtspotService) => {
   }
 };
 
-export const getLifeCycle = (cs: ContextService, ts: ThoughtspotService, id?: string) => {
-  const defaultLC = getDefault(cs, ts);
+export const getLifeCycle = (fs: FilterService, id?: string): LifecycleData => {
+  const defaultLC = getDefault(fs);
   if(id === 'alternative'){
-    cs.msgs.info("LOADING FROM ALTERNATIVE LOAD DATA!!!");
-    //defaultLC.loadData = () => { console.log("LOADING FROM ALTERNATIVE LOAD DATA!!!"); return defaultLC.loadData()}
     return {
       clearFields: defaultLC.clearFields,
       disableFields: defaultLC.disableFields,
@@ -76,5 +69,3 @@ export const getLifeCycle = (cs: ContextService, ts: ThoughtspotService, id?: st
   }
   return defaultLC;
 };
-
-//export default getLifeCycle;

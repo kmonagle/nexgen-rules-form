@@ -2,9 +2,8 @@ import { Injectable } from '@angular/core';
 import {KeyValue} from '../app.component';
 import {of} from 'rxjs';
 import {Observable} from 'rxjs';
-import {FieldStructure} from './form.service';
+import {Filter} from '../model/Filter';
 import {MessageService} from './message.service';
-import {ContextService} from './context.service';
 
 
 @Injectable({
@@ -12,20 +11,19 @@ import {ContextService} from './context.service';
 })
 export class ThoughtspotService {
 
-  constructor(private contextService: ContextService) { }
+  constructor(private ms: MessageService) { }
 
-  getData(guid: string, formerFields: FieldStructure[]): Observable<KeyValue[]> {
+  getData(guid: string, formerFields: Filter[]): Observable<KeyValue[]> {
 
     console.log('guid: ', guid);
     console.log('formerFields: ', formerFields);
 
-    //https://ts-analytics-le.drcedirect.com/callosum/v1/tspublic/v1/pinboarddata?id=6c72ecde-c578-4c47-b442-2f9573392cb0
     let tsUrl = `https://ts-analytics-le.drcedirect.com/callosum/v1/tspublic/v1/pinboarddata?id=${guid}`;
     formerFields.forEach(field => {
       tsUrl += `&${field.config.data.param.name}=${field.control.value}`
     });
     console.log('tsUrl: ', tsUrl);
-    this.contextService.msgs.info('Calling: ' + tsUrl);
+    this.ms.info('Calling: ' + tsUrl);
 
 
     if (guid === '78c5a246-b6a6-49aa-aa16-b4340957b78c') {
