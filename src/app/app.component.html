@@ -1,9 +1,9 @@
-<div *ngFor="let field of filters" class="form-container">
+<div *ngFor="let filter of filters$ | async" class="form-container">
 
-  <mat-form-field class="form-select">
-    <mat-label>{{field.config.label}}:</mat-label>
-    <mat-select [formControl]="field.control"  [id]="field.name">
-      <mat-option *ngFor="let datum of field.dataStream | async" value="{{datum.key}}">
+  <mat-form-field class="form-select" *ngIf="filter.visible">
+    <mat-label>{{filter.config.label}}:</mat-label>
+    <mat-select [formControl]="filter.control" [id]="filter.name">
+      <mat-option *ngFor="let datum of filter.dataStream | async" value="{{datum.key}}">
         {{datum.value}}
       </mat-option>
     </mat-select>

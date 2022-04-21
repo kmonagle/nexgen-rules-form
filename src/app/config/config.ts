@@ -16,7 +16,7 @@ export const config = {
         },
         initialValue: "",
         disabled: false,
-        handler: "altHandler"
+        handler: "alt"
       },
       {
         name: "administration",
@@ -32,7 +32,8 @@ export const config = {
           type: "THOUGHTSPOT"
         },
         initialValue: "",
-        disabled: true
+        disabled: true,
+        visible: true
       },
       {
         name: "district",
@@ -64,7 +65,25 @@ export const config = {
           type: "THOUGHTSPOT"
         },
         initialValue: "",
-        disabled: true
+        disabled: true,
+        handler: "WIDA_school"
+      },
+      {
+        name: "assessment",
+        type: "select",
+        multi: false,
+        label: "Assessment",
+        required: true,
+        data: {
+          pinboardGUID: "c9ac5220-aa49-49f8-a2c6-f729b9412999",
+          param: {
+            name: "assessment"
+          },
+          type: "THOUGHTSPOT"
+        },
+        initialValue: "",
+        disabled: true,
+        visible: false
       }
     ]
   }

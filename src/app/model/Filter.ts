@@ -14,6 +14,7 @@ export class Filter{
   index: number;
   isCurrent: boolean;
   isFirst: boolean;
+  visible: boolean;
 
   constructor(filterData: FilterConfig, index: number, private fs: FilterService){
     this.name = filterData.name;
@@ -23,6 +24,7 @@ export class Filter{
     this._dataSubject = new BehaviorSubject<KeyValue[] | null>(null);
     this.dataStream = this._dataSubject.asObservable();
     this.isCurrent = false;
+    this.visible = filterData.visible === false ? false : true;
     this.isFirst = (index === 0);
   }
 

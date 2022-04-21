@@ -33,6 +33,7 @@ export interface FilterConfig {
   data: FormFieldData;
   initialValue: string;
   disabled: boolean;
+  visible?: boolean;
   handler?: string
 }
 

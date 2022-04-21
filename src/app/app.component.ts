@@ -1,6 +1,7 @@
-import {AfterViewInit, Component, OnInit} from '@angular/core';
+import {AfterViewInit, Component} from '@angular/core';
 import {FilterService} from './services/filter.service';
 import {Filter} from './model/Filter';
+import {Observable} from 'rxjs';
 
 export interface KeyValue{
   key: string;
@@ -12,14 +13,12 @@ export interface KeyValue{
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
 })
-export class AppComponent implements OnInit, AfterViewInit{
+export class AppComponent implements AfterViewInit{
 
-  filters: Filter[] = [];
+  filters$: Observable<Filter[]|null>;
 
-  constructor(private filterService: FilterService){}
-
-  ngOnInit(): void {
-    this.filters = this.filterService.filters;
+  constructor(private filterService: FilterService){
+    this.filters$ = filterService.filters;
   }
 
   ngAfterViewInit(): void {

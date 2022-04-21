@@ -45,6 +45,11 @@ export class ThoughtspotService {
         {key: "school1", value: "School 1"},
         {key: "school2", value: "School 2"},
       ]);
+    } else if(guid === "c9ac5220-aa49-49f8-a2c6-f729b9412999"){
+      return of([
+        {key: "assessment1", value: "Assessment 1"},
+        {key: "assessment2", value: "Assessment 2"},
+      ]);
     }
 
     return of([]);

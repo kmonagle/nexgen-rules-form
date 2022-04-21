@@ -2,6 +2,8 @@ import {FilterService} from '../services/filter.service';
 import {Filter} from '../model/Filter';
 import {take, tap} from 'rxjs/operators';
 import {of} from 'rxjs/internal/observable/of';
+import {Observable} from 'rxjs/internal/Observable';
+import {KeyValue} from '../app.component';
 
 const clear = (fs: FilterService) => {
   const latterFields: Filter[] = fs.getLatter(fs.getCurrent());
@@ -52,15 +54,21 @@ const altHandler = (fs: FilterService) => {
   return loadNext(fs);
 };
 
-const handlers = {
-  altHandler,
-  defaultHandler
+const WIDA_school = (fs: FilterService) => {
+  console.log("running WIDA_school");
+  clearAndDisable(fs);
+  return (<Observable<any>>loadNext(fs)).pipe(tap(val => {
+    fs.getFilterByName("assessment").visible=true;
+    fs.getFilterByName("assessment").control.enable();
+    fs.publishFilters();
+  }));
 };
 
-export function getHandler(id?: string): any{
-  if(!id){
-    return defaultHandler;
-  } else if(id === 'altHandler') {
-    return altHandler;
-  }
+const handlers = new Map<string, (fs: FilterService) => Observable<KeyValue[]> | Observable<null>>();
+handlers.set("alt", altHandler);
+handlers.set("default", defaultHandler);
+handlers.set("WIDA_school", WIDA_school);
+
+export function getHandler(id:string = "default"): (fs: FilterService) => Observable<KeyValue[]> | Observable<null>{
+  return handlers.get(id)!;
 }
