@@ -2,6 +2,8 @@ import {AfterViewInit, Component} from '@angular/core';
 import {FilterService} from './services/filter.service';
 import {Filter} from './model/Filter';
 import {Observable} from 'rxjs';
+import {Button} from './model/Button';
+import {ButtonService} from './services/button.service';
 
 export interface KeyValue{
   key: string;
@@ -16,9 +18,11 @@ export interface KeyValue{
 export class AppComponent implements AfterViewInit{
 
   filters$: Observable<Filter[]|null>;
+  buttons$: Observable<Button[]|null>;
 
-  constructor(private filterService: FilterService){
+  constructor(private filterService: FilterService, private buttonService: ButtonService){
     this.filters$ = filterService.filters;
+    this.buttons$ = buttonService.buttons;
   }
 
   ngAfterViewInit(): void {

@@ -15,21 +15,27 @@ export class Filter{
   isCurrent: boolean;
   isFirst: boolean;
   visible: boolean;
+  visibleRules: any[];
+  enabled: boolean;
+  enabledRules: any[];
 
   constructor(filterData: FilterConfig, index: number, private fs: FilterService){
     this.name = filterData.name;
     this.index = index;
     this.config = filterData;
-    this.control = new FormControl({value: filterData.initialValue, disabled: filterData.disabled});
+    this.enabled = true;
+    this.visible = true;
+    this.enabledRules = filterData.enabledRules!;
+    this.visibleRules = filterData.visibleRules!;
+    this.control = new FormControl({value: filterData.initialValue, disabled: !this.enabled});
     this._dataSubject = new BehaviorSubject<KeyValue[] | null>(null);
     this.dataStream = this._dataSubject.asObservable();
     this.isCurrent = false;
-    this.visible = filterData.visible === false ? false : true;
+
     this.isFirst = (index === 0);
   }
 
   populate(data: KeyValue[]){
-    console.log('populating: ', data);
     this._dataSubject.next(data)
   }
 

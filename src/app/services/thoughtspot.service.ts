@@ -15,14 +15,10 @@ export class ThoughtspotService {
 
   getData(guid: string, formerFields: Filter[]): Observable<KeyValue[]> {
 
-    console.log('guid: ', guid);
-    console.log('formerFields: ', formerFields);
-
     let tsUrl = `https://ts-analytics-le.drcedirect.com/callosum/v1/tspublic/v1/pinboarddata?id=${guid}`;
     formerFields.forEach(field => {
       tsUrl += `&${field.config.data.param.name}=${field.control.value}`
     });
-    console.log('tsUrl: ', tsUrl);
     this.ms.info('Calling: ' + tsUrl);
 
 

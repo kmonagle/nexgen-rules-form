@@ -1,13 +1,13 @@
 import { TestBed } from '@angular/core/testing';
 
-import { HandlerService } from './handler.service';
+import { RulesService } from './rules.service';
 
-describe('HandlerService', () => {
-  let service: HandlerService;
+describe('RulesService', () => {
+  let service: RulesService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({});
-    service = TestBed.inject(HandlerService);
+    service = TestBed.inject(RulesService);
   });
 
   it('should be created', () => {

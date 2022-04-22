@@ -1,5 +1,25 @@
 export const config = {
   form:{
+    buttons: [
+      {
+        name: "district-report",
+        label: "District Report",
+        enabledRules: [],
+        visibleRules: [],
+      },
+      {
+        name: "school-report",
+        label: "School Report",
+        enabledRules: [],
+        visibleRules: [],
+      },
+      {
+        name: "assessment-report",
+        label: "Assessment Report",
+        enabledRules: [],
+        visibleRules: [],
+      }
+    ],
     fields: [
       {
         name: "report",
@@ -15,8 +35,11 @@ export const config = {
           type: "THOUGHTSPOT"
         },
         initialValue: "",
-        disabled: false,
-        handler: "alt"
+        visibleRules: [],
+        enabledRules: [],
+        change: [],
+        handler: "alt",
+        load: [],
       },
       {
         name: "administration",
@@ -32,8 +55,10 @@ export const config = {
           type: "THOUGHTSPOT"
         },
         initialValue: "",
-        disabled: true,
-        visible: true
+        visibleRules: [],
+        enabledRules: [],
+        load: [],
+        change: [],
       },
       {
         name: "district",
@@ -49,7 +74,10 @@ export const config = {
           type: "THOUGHTSPOT"
         },
         initialValue: "",
-        disabled: true
+        visibleRules: [],
+        enabledRules: [],
+        load: [],
+        change: [],
       },
       {
         name: "school",
@@ -65,7 +93,10 @@ export const config = {
           type: "THOUGHTSPOT"
         },
         initialValue: "",
-        disabled: true,
+        visibleRules: [],
+        enabledRules: [],
+        load: [],
+        change: [],
         handler: "WIDA_school"
       },
       {
@@ -82,8 +113,10 @@ export const config = {
           type: "THOUGHTSPOT"
         },
         initialValue: "",
-        disabled: true,
-        visible: false
+        visibleRules: [],
+        enabledRules: [],
+        load: [],
+        change: [],
       }
     ]
   }

@@ -1,3 +1,10 @@
+<div [ngStyle]="{display: 'flex', justifyContent:'space-between', width: '400px'}">
+  <div *ngFor="let button of buttons$ | async" class="form-container">
+    <button *ngIf="button.visible" [disabled]="!button.enabled">{{ button.label }}</button>
+  </div>
+</div>
+
+
 <div *ngFor="let filter of filters$ | async" class="form-container">
 
   <mat-form-field class="form-select" *ngIf="filter.visible">

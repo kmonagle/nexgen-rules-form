@@ -32,9 +32,18 @@ export interface FilterConfig {
   required: boolean,
   data: FormFieldData;
   initialValue: string;
-  disabled: boolean;
-  visible?: boolean;
-  handler?: string
+  handler?: string;
+  enabledRules?: any[];
+  visibleRules?: any[];
+  load?: any[];
+  change?: any[]
+}
+
+export interface ButtonConfig {
+  name: string;
+  label: string,
+  enabledRules?: any[];
+  visibleRules?: any[];
 }
 
 export interface LifecycleData {
