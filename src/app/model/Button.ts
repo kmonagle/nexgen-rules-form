@@ -14,7 +14,7 @@ export class Button{
     this.name = buttonConfig.name;
     this.config = buttonConfig;
     this.label = buttonConfig.label;
-    this.enabled = false;
+    this.enabled = true;
     this.visible = true;
   }
 }

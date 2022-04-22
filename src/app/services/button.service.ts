@@ -40,6 +40,14 @@ export class ButtonService {
           } else {
             button.enabled = true;
           }
+          if(button.config.visibleRules!.length > 0){
+            const rules = button.config.visibleRules![0];
+            promises.push(rs.runRules(rules, facts).then(result => {
+              button.visible = result;
+            }))
+          } else {
+            button.visible = true;
+          }
         });
         Promise.all(promises).then(res => this._buttonSubject.next(this._buttons));
       })
