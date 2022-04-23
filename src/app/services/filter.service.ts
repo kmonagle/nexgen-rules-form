@@ -5,8 +5,8 @@ import {Filter} from '../model/Filter';
 import {BehaviorSubject, Observable} from 'rxjs/index';
 import {KeyValue} from '../app.component';
 import {DatasourceService} from './datasource.service';
-import {RulesService} from './rules.service';
 import {ConfigurationService} from './configuration.service';
+import {getFacts, runRules} from '../helper/rules';
 
 @Injectable({
   providedIn: 'root'
@@ -21,7 +21,7 @@ export class FilterService {
 
   private _filters: Filter[] = [];
 
-  constructor(private ds: DatasourceService, private rs: RulesService, cs: ConfigurationService) {
+  constructor(private ds: DatasourceService, cs: ConfigurationService) {
 
     // we want to run the filters through the rules the first time the filters are set up...we do that here(happens once!)
     this.filters.pipe(
@@ -41,7 +41,7 @@ export class FilterService {
     this.filterChange.pipe(
       filter(filter => !!filter),
       tap(filter => {
-        this.resetIsCurrent(filter!)
+        this.resetIsCurrent(filter!);
         // we'll be gathering a bunch of promises potentially depending on config
         let promises: Promise<any>[] = [];
         const latter = this.getLatter(filter!);
@@ -124,13 +124,13 @@ export class FilterService {
 
   runFilters(filter: Filter): Promise<any>[]{
     const promises = [];
-    const facts = this.rs.getFacts(this._filters);
+    const facts = getFacts(this._filters);
     if(filter.config.visibleRules!.length === 0){
       filter.visible = true;
     } else {
       //filter.visible = filter.config.visibleRules!.every(rule => this.getFilterByName(rule).control.value)
       const rules = filter.config.visibleRules![0];
-      promises.push(this.rs.runRules(rules,facts).then(result => {
+      promises.push(runRules(rules,facts).then(result => {
         filter.visible = result;
       }))
     }
@@ -138,7 +138,7 @@ export class FilterService {
       filter.enabled = true;
     } else {
       const rules = filter.config.enabledRules![0];
-      promises.push(this.rs.runRules(rules,facts).then(result => {
+      promises.push(runRules(rules,facts).then(result => {
         if(result && filter.control.disabled){
           filter.control.enable();
         }
@@ -146,7 +146,7 @@ export class FilterService {
     }
     if(filter.config.load! && filter.config.load!.length >= 1){
       const rules = filter.config.load![0];
-      this.rs.runRules(rules,facts).then(result => {
+      runRules(rules,facts).then(result => {
         if(result){
           promises.push(this.getDataSource(filter).pipe(
             tap(results => {
