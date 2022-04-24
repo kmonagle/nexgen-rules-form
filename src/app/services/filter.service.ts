@@ -23,33 +23,9 @@ export class FilterService {
 
   constructor(private ds: DataService, cs: ConfigurationService) {
 
-    // we want to run the filters through the rules the first time the filters are set up...we do that here(happens once!)
-    this.filters.pipe(
-      take(1),
-      mergeMap(() => {
-        // init first field
-        return this.getDataSource(this.getFirst()).pipe(
-          tap( data => this.getFirst().populate(data))
-        );
-      }),
-      tap(filters => {
-        this.resetIsCurrent(this.getFirst()); //set first to current
-        let obs: Observable<any>[] = this.runFilters(this.getFirst());
-        forkJoin(obs).subscribe(() => {}, () => {}, () => this._filterSubject.next(this._filters));
-      })
-    ).subscribe();
-
-    // ongoing
-    this.filterChange.pipe(
-      tap(filter => {
-        this.resetIsCurrent(filter!);
-        let obs: Observable<any>[] = this.runFilters(filter!);
-        forkJoin(obs).subscribe(() => {}, () => {}, () => this._filterSubject.next(this._filters));
-      }),
-    ).subscribe();
-
+    // init, create filters, wire up listeners, load first field, do the initial rule run
     cs.config.pipe(
-      take(1),
+      take(1), //do it once!!
       tap(config => {
         config!.form.fields.forEach((filterConfig: FilterConfig, idx:number) => {
           const filter2 = new Filter(filterConfig, idx, this);
@@ -60,7 +36,27 @@ export class FilterService {
           ).subscribe();
         });
         this._filterSubject.next(this._filters);
+      }),
+      mergeMap(() => {
+        // init first field
+        return this.getDataSource(this.getFirst()).pipe(
+          tap( data => this.getFirst().populate(data))
+        );
+      }),
+      tap(() => {
+        this.resetIsCurrent(this.getFirst()); //set first to current
+        let obs: Observable<any>[] = this.runFilters(this.getFirst());
+        forkJoin(obs).subscribe(() => {}, () => {}, () => this._filterSubject.next(this._filters));
       })
+    ).subscribe();
+
+    // ongoing listener
+    this.filterChange.pipe(
+      tap(filter => {
+        this.resetIsCurrent(filter!);
+        let obs: Observable<any>[] = this.runFilters(filter!);
+        forkJoin(obs).subscribe(() => {}, () => {}, () => this._filterSubject.next(this._filters));
+      }),
     ).subscribe();
   }
 
