@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import {BehaviorSubject} from 'rxjs/index';
+import {BehaviorSubject, combineLatest, forkJoin, Observable} from 'rxjs/index';
 import {ButtonConfig} from '../model/interfaces';
 import {ConfigurationService} from './configuration.service';
 import {Button} from '../model/Button';
@@ -29,27 +29,22 @@ export class ButtonService {
       filter(val => !!val),
       tap(filters => {
         const facts = getFacts(filters!);
-        const promises:Promise<any>[] = [];
+        const obs:Observable<any>[] = [];
 
         this._buttons.forEach(button => {
-          if(button.config.enabledRules!.length > 0){
-            const rules = button.config.enabledRules![0];
-            promises.push(runRules(rules, facts).then(result => {
-              button.enabled = result;
-            }))
-          } else {
-            button.enabled = true;
-          }
-          if(button.config.visibleRules!.length > 0){
-            const rules = button.config.visibleRules![0];
-            promises.push(runRules(rules, facts).then(result => {
-              button.visible = result;
-            }))
-          } else {
-            button.visible = true;
-          }
+          let rules = button.config.enabledRules![0];
+          obs.push(runRules(rules, facts).pipe(
+            tap(result => button.enabled = result)
+          ));
+          rules = button.config.visibleRules![0];
+          obs.push(runRules(rules, facts).pipe(
+            tap(result => button.visible = result)
+          ));
         });
-        Promise.all(promises).then(() => this._buttonSubject.next(this._buttons));
+        forkJoin(obs).subscribe(res => {
+          console.log("button results: ", res);
+          this._buttonSubject.next(this._buttons);
+        });
       })
     ).subscribe();
   }

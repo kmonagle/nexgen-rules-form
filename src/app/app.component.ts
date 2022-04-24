@@ -15,7 +15,7 @@ export interface KeyValue{
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
 })
-export class AppComponent implements AfterViewInit{
+export class AppComponent{
 
   filters$: Observable<Filter[]|null>;
   buttons$: Observable<Button[]|null>;
@@ -23,10 +23,6 @@ export class AppComponent implements AfterViewInit{
   constructor(private filterService: FilterService, private buttonService: ButtonService){
     this.filters$ = filterService.filters;
     this.buttons$ = buttonService.buttons;
-  }
-
-  ngAfterViewInit(): void {
-    this.filterService.loadApp(); //load up the first filter
   }
 
 }
