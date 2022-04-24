@@ -4,7 +4,7 @@ import {tap, filter, take, skip, mergeMap} from 'rxjs/operators';
 import {Filter} from '../model/Filter';
 import {BehaviorSubject, forkJoin, Observable} from 'rxjs/index';
 import {KeyValue} from '../app.component';
-import {DatasourceService} from './datasource.service';
+import {DataService} from './data.service';
 import {ConfigurationService} from './configuration.service';
 import {getFacts, runRules} from '../helper/rules';
 
@@ -21,7 +21,7 @@ export class FilterService {
 
   private _filters: Filter[] = [];
 
-  constructor(private ds: DatasourceService, cs: ConfigurationService) {
+  constructor(private ds: DataService, cs: ConfigurationService) {
 
     // we want to run the filters through the rules the first time the filters are set up...we do that here(happens once!)
     this.filters.pipe(

@@ -7,7 +7,7 @@ import {DataSources} from '../model/constants';
 @Injectable({
   providedIn: 'root'
 })
-export class DatasourceService {
+export class DataService {
 
   constructor(private ts: ThoughtspotService) { }
 
