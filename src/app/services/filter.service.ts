@@ -39,6 +39,7 @@ export class FilterService {
       })
     ).subscribe();
 
+    // ongoing
     this.filterChange.pipe(
       tap(filter => {
         this.resetIsCurrent(filter!);
@@ -47,18 +48,20 @@ export class FilterService {
       }),
     ).subscribe();
 
-    const config = cs.getConfig();
-
-    config.form.fields.forEach((filterConfig: FilterConfig, idx) => {
-      const filter2 = new Filter(filterConfig, idx, this);
-      this._filters.push(filter2);
-      filter2.control.valueChanges.pipe(
-        filter(val => !!val),
-        tap(() => this._filterChangeSubject.next(filter2))
-      ).subscribe();
-    });
-
-    this._filterSubject.next(this._filters);
+    cs.config.pipe(
+      take(1),
+      tap(config => {
+        config!.form.fields.forEach((filterConfig: FilterConfig, idx:number) => {
+          const filter2 = new Filter(filterConfig, idx, this);
+          this._filters.push(filter2);
+          filter2.control.valueChanges.pipe(
+            filter(val => !!val),
+            tap(() => this._filterChangeSubject.next(filter2))
+          ).subscribe();
+        });
+        this._filterSubject.next(this._filters);
+      })
+    ).subscribe();
   }
 
   getFormer(filter: Filter): Filter[]{
@@ -97,8 +100,6 @@ export class FilterService {
 
     let filters = this.getLatter(filter);
 
-    console.log('running filters: ', filters);
-
     filters.forEach((filter: Filter) => {
 
       filter.control.reset();
@@ -110,7 +111,7 @@ export class FilterService {
         //filter.visible = filter.config.visibleRules!.every(rule => this.getFilterByName(rule).control.value)
         const rules = filter.config.visibleRules![0];
         obs.push(runRules(rules,facts).pipe(
-          tap(result => filter.visible = result )
+          tap((result:boolean) => filter.visible = result )
         ))
       }
       if(filter.config.enabledRules!.length === 0){
@@ -145,7 +146,6 @@ export class FilterService {
         ));
       }
     });
-    console.log('returning obs: ', obs);
     return obs;
   }
 }

@@ -1,14 +1,26 @@
 import { Injectable } from '@angular/core';
 import {config} from '../config/config';
+import {skip} from 'rxjs/operators';
+import {BehaviorSubject} from 'rxjs/index';
+import {Filter} from '../model/Filter';
+import {ButtonConfig, FilterConfig} from '../model/interfaces';
+
+export interface Configuration {
+  form: {
+    buttons:ButtonConfig[],
+    fields: FilterConfig[]
+  }
+}
 
 @Injectable({
   providedIn: 'root'
 })
 export class ConfigurationService {
 
-  constructor() { }
+  private _configSubject = new BehaviorSubject<Configuration | null>(null);
+  config = this._configSubject.asObservable();
 
-  getConfig(){
+  constructor() {
     (config.form.fields[1].enabledRules as any).push(this.haveValueRule(["report"])); //admin
     (config.form.fields[2].enabledRules as any).push(this.haveValueRule(["report", "administration"])); //district
     (config.form.fields[3].enabledRules as any).push(this.haveValueRule(["report", "administration", "district"])); //school
@@ -21,11 +33,27 @@ export class ConfigurationService {
     (config.form.buttons[1].enabledRules as any).push(this.haveValueRule(["report"])); //school
     (config.form.buttons[2].enabledRules as any).push(this.haveValueRule(["report", "administration","district", "school", "assessment"])); //assessment
     (config.form.buttons[2].visibleRules as any).push(this.haveValueRule(["report", "administration","district", "school", "assessment"])); //assessment
-    // (config.form.fields[3].enabledRules as any).push(this.haveValueRule(["report", "administration", "district"])); //school
-    // (config.form.fields[4].enabledRules as any).push(this.haveValueRule(["report", "administration", "district", "school"])); //assessment
-
-    return config;
+    this._configSubject.next(config);
   }
+
+  // getConfig(){
+  //   (config.form.fields[1].enabledRules as any).push(this.haveValueRule(["report"])); //admin
+  //   (config.form.fields[2].enabledRules as any).push(this.haveValueRule(["report", "administration"])); //district
+  //   (config.form.fields[3].enabledRules as any).push(this.haveValueRule(["report", "administration", "district"])); //school
+  //   (config.form.fields[4].enabledRules as any).push(this.haveValueRule(["report", "administration", "district", "school"])); //assessment
+  //   (config.form.fields[1].load as any).push(this.haveValueRule(["report"])); //admin
+  //   (config.form.fields[2].load as any).push(this.haveValueRule(["report", "administration"])); //district
+  //   (config.form.fields[3].load as any).push(this.haveValueRule(["report", "administration", "district"])); //school
+  //   (config.form.fields[4].load as any).push(this.haveValueRule(["report", "administration", "district", "school"])); //assessment
+  //
+  //   (config.form.buttons[1].enabledRules as any).push(this.haveValueRule(["report"])); //school
+  //   (config.form.buttons[2].enabledRules as any).push(this.haveValueRule(["report", "administration","district", "school", "assessment"])); //assessment
+  //   (config.form.buttons[2].visibleRules as any).push(this.haveValueRule(["report", "administration","district", "school", "assessment"])); //assessment
+  //   // (config.form.fields[3].enabledRules as any).push(this.haveValueRule(["report", "administration", "district"])); //school
+  //   // (config.form.fields[4].enabledRules as any).push(this.haveValueRule(["report", "administration", "district", "school"])); //assessment
+  //
+  //   return config;
+  // }
 
   haveValueRule(names: string[]){
     return {

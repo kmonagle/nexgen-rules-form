@@ -19,11 +19,14 @@ export class ButtonService {
 
   constructor(cs: ConfigurationService, fs: FilterService) {
 
-    const config = cs.getConfig();
-    config.form.buttons.forEach((buttonConfig: ButtonConfig) => {
-      const button = new Button(buttonConfig, this, fs);
-      this._buttons.push(button);
-    });
+    cs.config.pipe(
+      tap(config => {
+        config!.form.buttons.forEach((buttonConfig: ButtonConfig) => {
+          const button = new Button(buttonConfig, this, fs);
+          this._buttons.push(button);
+        });
+      })
+    ).subscribe();
 
     fs.filters.pipe(
       filter(val => !!val),
@@ -42,7 +45,6 @@ export class ButtonService {
           ));
         });
         forkJoin(obs).subscribe(res => {
-          console.log("button results: ", res);
           this._buttonSubject.next(this._buttons);
         });
       })
