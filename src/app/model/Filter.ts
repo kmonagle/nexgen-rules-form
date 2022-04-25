@@ -19,7 +19,7 @@ export class Filter{
   enabled: boolean;
   enabledRules: any[];
 
-  constructor(filterData: FilterConfig, index: number, private fs: FilterService){
+  constructor(filterData: FilterConfig, index: number){
     this.name = filterData.name;
     this.index = index;
     this.config = filterData;
@@ -37,17 +37,5 @@ export class Filter{
 
   populate(data: KeyValue[]){
     this._dataSubject.next(data)
-  }
-
-  getFormer(): Filter[]{
-    return this.fs.getFormer(this);
-  }
-
-  getLatter(): Filter[]{
-    return this.fs.getLatter(this);
-  }
-
-  getNext(): Filter{
-    return this.fs.getNext(this);
   }
 }

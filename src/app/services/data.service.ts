@@ -11,11 +11,11 @@ export class DataService {
 
   constructor(private ts: ThoughtspotService) { }
 
-  getDatasource(filter: Filter){
+  getData(filter: Filter, formerFilters: Filter[]){
     if(filter.config.data.type === DataSources.THOUGHTSPOT){
-      return this.ts.getData(filter.config.data.pinboardGUID, filter.getFormer());
+      return this.ts.getData(filter.config.data.pinboardGUID, formerFilters);
     }
-    return this.ts.getData(filter.config.data.pinboardGUID, filter.getFormer());
+    return this.ts.getData(filter.config.data.pinboardGUID, formerFilters);
   }
 
 }

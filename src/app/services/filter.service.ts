@@ -3,7 +3,6 @@ import {FilterConfig} from '../model/interfaces';
 import {tap, filter, take, skip, mergeMap} from 'rxjs/operators';
 import {Filter} from '../model/Filter';
 import {BehaviorSubject, forkJoin, Observable} from 'rxjs/index';
-import {KeyValue} from '../app.component';
 import {DataService} from './data.service';
 import {ConfigurationService} from './configuration.service';
 import {getFacts, runRules} from '../helper/rules';
@@ -28,7 +27,7 @@ export class FilterService {
       take(1), //do it once!!
       tap(config => {
         config!.form.fields.forEach((filterConfig: FilterConfig, idx:number) => {
-          const filter2 = new Filter(filterConfig, idx, this);
+          const filter2 = new Filter(filterConfig, idx);
           this._filters.push(filter2);
           filter2.control.valueChanges.pipe(
             filter(val => !!val),
@@ -39,7 +38,7 @@ export class FilterService {
       }),
       mergeMap(() => {
         // init first field
-        return this.getDataSource(this.getFirst()).pipe(
+        return this.ds.getData(this.getFirst(), []).pipe(
           tap( data => this.getFirst().populate(data))
         );
       }),
@@ -68,21 +67,12 @@ export class FilterService {
     return this._filters.slice(filter.index + 1);
   }
 
-  getNext(filter: Filter): Filter{
-    const latter = this.getLatter(filter);
-    return latter[0];
-  }
-
   getFirst(){
     const first = this._filters.find(flt => flt.isFirst);
     if(!first){
       throw new Error()
     }
     return first;
-  }
-
-  getDataSource(filter: Filter): Observable<KeyValue[]>{
-    return this.ds.getDatasource(filter);
   }
 
   resetIsCurrent(filter: Filter){
@@ -128,7 +118,7 @@ export class FilterService {
           //tap(result => console.log('load result: ', result, filter)),
           tap(result => {
             if(result){
-              this.getDataSource(filter).pipe(
+              this.ds.getData(filter, this.getFormer(filter)).pipe(
                 //tap(data => console.log('load data: ', data)),
                 tap(results => {
                   filter.populate(results);
