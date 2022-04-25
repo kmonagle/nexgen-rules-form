@@ -1,8 +1,4 @@
-<div [ngStyle]="{display: 'flex', justifyContent:'space-between', width: '400px'}">
-  <div *ngFor="let button of buttons$ | async" class="form-container">
-    <button *ngIf="button.visible" [disabled]="!button.enabled">{{ button.label }}</button>
-  </div>
-</div>
+
 
 
 <div *ngFor="let filter of filters$ | async" class="form-container">
@@ -16,6 +12,12 @@
     </mat-select>
   </mat-form-field>
 
+</div>
+
+<div [ngStyle]="{display: 'flex', justifyContent:'space-between', width: '400px'}">
+  <div *ngFor="let button of buttons$ | async" class="form-container">
+    <button *ngIf="button.visible" [disabled]="!button.enabled">{{ button.label }}</button>
+  </div>
 </div>
 
 <router-outlet></router-outlet>

@@ -2,23 +2,23 @@ export const config = {
   form:{
     buttons: [
       {
-        name: "district-report",
-        label: "District Report",
+        name: "submit",
+        label: "Submit",
         enabledRules: [],
         visibleRules: [],
       },
-      {
-        name: "school-report",
-        label: "School Report",
-        enabledRules: [],
-        visibleRules: [],
-      },
-      {
-        name: "assessment-report",
-        label: "Assessment Report",
-        enabledRules: [],
-        visibleRules: [],
-      }
+      // {
+      //   name: "school-report",
+      //   label: "School Report",
+      //   enabledRules: [],
+      //   visibleRules: [],
+      // },
+      // {
+      //   name: "assessment-report",
+      //   label: "Assessment Report",
+      //   enabledRules: [],
+      //   visibleRules: [],
+      // }
     ],
     fields: [
       {
@@ -42,15 +42,15 @@ export const config = {
         load: [],
       },
       {
-        name: "administration",
+        name: "view",
         type: "select",
         multi: false,
-        label: "Administration",
+        label: "View",
         required: true,
         data: {
           pinboardGUID: "f1a77437-b6d3-406f-9982-5d600bb09dd6",
           param: {
-            name: "administration"
+            name: "view"
           },
           type: "THOUGHTSPOT"
         },
@@ -61,10 +61,10 @@ export const config = {
         change: [],
       },
       {
-        name: "district",
+        name: "criteria",
         type: "select",
         multi: false,
-        label: "District",
+        label: "Criteria",
         required: true,
         data: {
           pinboardGUID: "c9ac5220-aa49-49f8-a2c6-f729b9412fdb",
@@ -79,45 +79,46 @@ export const config = {
         load: [],
         change: [],
       },
-      {
-        name: "school",
-        type: "select",
-        multi: false,
-        label: "School",
-        required: true,
-        data: {
-          pinboardGUID: "985ad04f-165e-47fd-a227-b18a64ee8a00",
-          param: {
-            name: "school"
-          },
-          type: "THOUGHTSPOT"
-        },
-        initialValue: "",
-        visibleRules: [],
-        enabledRules: [],
-        load: [],
-        change: [],
-        handler: "WIDA_school"
-      },
-      {
-        name: "assessment",
-        type: "select",
-        multi: false,
-        label: "Assessment",
-        required: true,
-        data: {
-          pinboardGUID: "c9ac5220-aa49-49f8-a2c6-f729b9412999",
-          param: {
-            name: "assessment"
-          },
-          type: "THOUGHTSPOT"
-        },
-        initialValue: "",
-        visibleRules: [],
-        enabledRules: [],
-        load: [],
-        change: [],
-      }
+
+      // {
+      //   name: "school",
+      //   type: "select",
+      //   multi: false,
+      //   label: "School",
+      //   required: true,
+      //   data: {
+      //     pinboardGUID: "985ad04f-165e-47fd-a227-b18a64ee8a00",
+      //     param: {
+      //       name: "school"
+      //     },
+      //     type: "THOUGHTSPOT"
+      //   },
+      //   initialValue: "",
+      //   visibleRules: [],
+      //   enabledRules: [],
+      //   load: [],
+      //   change: [],
+      //   handler: "WIDA_school"
+      // },
+      // {
+      //   name: "assessment",
+      //   type: "select",
+      //   multi: false,
+      //   label: "Assessment",
+      //   required: true,
+      //   data: {
+      //     pinboardGUID: "c9ac5220-aa49-49f8-a2c6-f729b9412999",
+      //     param: {
+      //       name: "assessment"
+      //     },
+      //     type: "THOUGHTSPOT"
+      //   },
+      //   initialValue: "",
+      //   visibleRules: [],
+      //   enabledRules: [],
+      //   load: [],
+      //   change: [],
+      // }
     ]
   }
 };
