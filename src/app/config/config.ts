@@ -25,6 +25,16 @@ export const config = {
                     {
                       "fact": "view",
                       "operator": "equal",
+                      "value": "consortium",
+                      "path": "$.control.value"
+                    },
+                  ]
+                },
+                {
+                  all: [
+                    {
+                      "fact": "view",
+                      "operator": "equal",
                       "value": "state",
                       "path": "$.control.value"
                     },
@@ -107,6 +117,16 @@ export const config = {
             },
             {
               any: [
+                {
+                  all: [
+                    {
+                      "fact": "view",
+                      "operator": "equal",
+                      "value": "consortium",
+                      "path": "$.control.value"
+                    },
+                  ]
+                },
                 {
                   all: [
                     {
@@ -201,6 +221,71 @@ export const config = {
         loadRules: null,
       },
       {
+        name: "admin",
+        type: "select",
+        multi: false,
+        label: ["Admin"],
+        required: true,
+        data: {
+          pinboardGUID: "78c5a246-b6a6-49aa-aa16-b4340957zzzz",
+          param: {
+            name: "admin"
+          },
+          type: "THOUGHTSPOT"
+        },
+        initialValue: "",
+        visibleRules: {
+          "all": [
+            {
+              "fact": "report",
+              "operator": "exists",
+              "value": "",
+              "path": "$.control.value"
+            },
+            {
+              "fact": "report",
+              "operator": "equal",
+              "value": "cumulative",
+              "path": "$.control.value"
+            }
+          ]
+        },
+        enabledRules: {
+          "all": [
+            {
+              "fact": "report",
+              "operator": "exists",
+              "value": "",
+              "path": "$.control.value"
+            },
+            {
+              "fact": "report",
+              "operator": "equal",
+              "value": "cumulative",
+              "path": "$.control.value"
+            }
+          ]
+        },
+        labelRules: [],
+        handler: "alt",
+        loadRules: {
+          "all": [
+            {
+              "fact": "report",
+              "operator": "exists",
+              "value": "",
+              "path": "$.control.value"
+            },
+            {
+              "fact": "report",
+              "operator": "equal",
+              "value": "cumulative",
+              "path": "$.control.value"
+            }
+          ]
+        },
+      },
+      {
         name: "view",
         type: "select",
         multi: false,
@@ -221,6 +306,36 @@ export const config = {
               "operator": "exists",
               "value": "",
               "path": "$.control.value"
+            },
+            {
+              any: [
+                {
+                  all: [
+                    {
+                      "fact": "report",
+                      "operator": "equal",
+                      "value": "cumulative",
+                      "path": "$.control.value"
+                    },
+                    {
+                      "fact": "admin",
+                      "operator": "exists",
+                      "value": "",
+                      "path": "$.control.value"
+                    }
+                  ]
+                },
+                {
+                  all: [
+                    {
+                      "fact": "report",
+                      "operator": "equal",
+                      "value": "concurrent",
+                      "path": "$.control.value"
+                    },
+                  ]
+                }
+              ]
             }
           ]
         },
@@ -273,6 +388,28 @@ export const config = {
               "operator": "exists",
               "value": "",
               "path": "$.control.value"
+            },
+            {
+              any: [
+                {
+                  "fact": "view",
+                  "operator": "equal",
+                  "value": "state",
+                  "path": "$.control.value"
+                },
+                {
+                  "fact": "view",
+                  "operator": "equal",
+                  "value": "district",
+                  "path": "$.control.value"
+                },
+                {
+                  "fact": "view",
+                  "operator": "equal",
+                  "value": "school",
+                  "path": "$.control.value"
+                }
+              ]
             }
           ]
         },
