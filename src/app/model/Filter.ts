@@ -2,6 +2,7 @@ import {FilterConfig} from './interfaces';
 import {FormControl} from '@angular/forms';
 import {KeyValue} from '../app.component';
 import {BehaviorSubject, Observable} from 'rxjs/index';
+import {TopLevelCondition} from 'json-rules-engine';
 
 export class Filter{
 
@@ -15,10 +16,10 @@ export class Filter{
   isCurrent: boolean;
   isFirst: boolean;
   visible: boolean;
-  visibleRules: any[];
-  labelRules: any[];
+  visibleRules: TopLevelCondition | null;
+  labelRules: TopLevelCondition[] | null;
   enabled: boolean;
-  enabledRules: any[];
+  enabledRules: TopLevelCondition | null;
 
   constructor(filterData: FilterConfig, index: number){
     this.name = filterData.name;
@@ -29,7 +30,7 @@ export class Filter{
     this.visible = true;
     this.enabledRules = filterData.enabledRules!;
     this.visibleRules = filterData.visibleRules!;
-    this.labelRules = filterData.visibleRules!;
+    this.labelRules = filterData.labelRules;
     this.control = new FormControl({value: filterData.initialValue, disabled: !this.enabled});
     this._dataSubject = new BehaviorSubject<KeyValue[] | null>(null);
     this.dataStream = this._dataSubject.asObservable();

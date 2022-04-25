@@ -36,13 +36,18 @@ export class ThoughtspotService {
       ]);
     } else if(guid === 'c9ac5220-aa49-49f8-a2c6-f729b9412fdb') {
       return of([
-        {key: "dist1", value: "Minnesota"},
-        {key: "dist2", value: "Texas"},
+        {key: "mn", value: "Minnesota"},
+        {key: "tx", value: "Texas"},
       ]);
     } else if(guid==='985ad04f-165e-47fd-a227-b18a64ee8a00'){
       return of([
         {key: "school1", value: "School 1"},
         {key: "school2", value: "School 2"},
+      ]);
+    } else if(guid==='985ad04f-165e-47fd-a227-b18a64ee8444'){
+      return of([
+        {key: "district1", value: "District 1"},
+        {key: "district2", value: "District 2"},
       ]);
     } else if(guid === "c9ac5220-aa49-49f8-a2c6-f729b9412999"){
       return of([

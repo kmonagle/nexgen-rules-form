@@ -13,6 +13,7 @@
 // }
 
 import {DataSources} from './constants';
+import {RuleProperties, TopLevelCondition} from 'json-rules-engine';
 
 export interface FormFieldDataParam {
   name: string;
@@ -32,19 +33,17 @@ export interface FilterConfig {
   required: boolean,
   data: FormFieldData;
   initialValue: string;
-  handler?: string;
-  enabledRules?: any[];
-  visibleRules?: any[];
-  labelRules?: any[];
-  loadRules?: any[];
-  change?: any[]
+  enabledRules: TopLevelCondition | null;
+  visibleRules: TopLevelCondition | null;
+  labelRules: TopLevelCondition[] | null;
+  loadRules: TopLevelCondition | null;
 }
 
 export interface ButtonConfig {
   name: string;
   label: string,
-  enabledRules?: any[];
-  visibleRules?: any[];
+  enabledRules?: TopLevelCondition | null;
+  visibleRules?: TopLevelCondition | null;
 }
 
 export interface LifecycleData {

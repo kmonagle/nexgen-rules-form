@@ -4,21 +4,180 @@ export const config = {
       {
         name: "submit",
         label: "Submit",
-        enabledRules: [],
-        visibleRules: [],
+        enabledRules: {
+          "all": [
+            {
+              "fact": "report",
+              "operator": "exists",
+              "value": "",
+              "path": "$.control.value"
+            },
+            {
+              "fact": "view",
+              "operator": "exists",
+              "value": "",
+              "path": "$.control.value"
+            },
+            {
+              any: [
+                {
+                  all: [
+                    {
+                      "fact": "view",
+                      "operator": "equal",
+                      "value": "state",
+                      "path": "$.control.value"
+                    },
+                    {
+                      "fact": "state",
+                      "operator": "exists",
+                      "value": "",
+                      "path": "$.control.value"
+                    },
+                  ]
+                },
+                {
+                  all: [
+                    {
+                      "fact": "view",
+                      "operator": "equal",
+                      "value": "district",
+                      "path": "$.control.value"
+                    },
+                    {
+                      "fact": "district",
+                      "operator": "exists",
+                      "value": "",
+                      "path": "$.control.value"
+                    },
+                    {
+                      "fact": "state",
+                      "operator": "exists",
+                      "value": "",
+                      "path": "$.control.value"
+                    },
+                  ]
+                },
+                {
+                  all: [
+                    {
+                      "fact": "view",
+                      "operator": "equal",
+                      "value": "school",
+                      "path": "$.control.value"
+                    },
+                    {
+                      "fact": "district",
+                      "operator": "exists",
+                      "value": "",
+                      "path": "$.control.value"
+                    },
+                    {
+                      "fact": "state",
+                      "operator": "exists",
+                      "value": "",
+                      "path": "$.control.value"
+                    },
+                    {
+                      "fact": "school",
+                      "operator": "exists",
+                      "value": "",
+                      "path": "$.control.value"
+                    },
+                  ]
+                },
+
+              ]
+            },
+          ]
+        } ,
+        visibleRules: {
+          "all": [
+            {
+              "fact": "report",
+              "operator": "exists",
+              "value": "",
+              "path": "$.control.value"
+            },
+            {
+              "fact": "view",
+              "operator": "exists",
+              "value": "",
+              "path": "$.control.value"
+            },
+            {
+              any: [
+                {
+                  all: [
+                    {
+                      "fact": "view",
+                      "operator": "equal",
+                      "value": "state",
+                      "path": "$.control.value"
+                    },
+                    {
+                      "fact": "state",
+                      "operator": "exists",
+                      "value": "",
+                      "path": "$.control.value"
+                    },
+                  ]
+                },
+                {
+                  all: [
+                    {
+                      "fact": "view",
+                      "operator": "equal",
+                      "value": "district",
+                      "path": "$.control.value"
+                    },
+                    {
+                      "fact": "district",
+                      "operator": "exists",
+                      "value": "",
+                      "path": "$.control.value"
+                    },
+                    {
+                      "fact": "state",
+                      "operator": "exists",
+                      "value": "",
+                      "path": "$.control.value"
+                    },
+                  ]
+                },
+                {
+                  all: [
+                    {
+                      "fact": "view",
+                      "operator": "equal",
+                      "value": "school",
+                      "path": "$.control.value"
+                    },
+                    {
+                      "fact": "district",
+                      "operator": "exists",
+                      "value": "",
+                      "path": "$.control.value"
+                    },
+                    {
+                      "fact": "state",
+                      "operator": "exists",
+                      "value": "",
+                      "path": "$.control.value"
+                    },
+                    {
+                      "fact": "school",
+                      "operator": "exists",
+                      "value": "",
+                      "path": "$.control.value"
+                    },
+                  ]
+                },
+              ]
+            },
+          ]
+        } ,
       },
-      // {
-      //   name: "school-report",
-      //   label: "School Report",
-      //   enabledRules: [],
-      //   visibleRules: [],
-      // },
-      // {
-      //   name: "assessment-report",
-      //   label: "Assessment Report",
-      //   enabledRules: [],
-      //   visibleRules: [],
-      // }
     ],
     fields: [
       {
@@ -35,11 +194,11 @@ export const config = {
           type: "THOUGHTSPOT"
         },
         initialValue: "",
-        visibleRules: [],
-        enabledRules: [],
+        visibleRules: null,
+        enabledRules: null,
         labelRules: [],
         handler: "alt",
-        loadRules: [],
+        loadRules: null,
       },
       {
         name: "view",
@@ -55,72 +214,288 @@ export const config = {
           type: "THOUGHTSPOT"
         },
         initialValue: "",
-        visibleRules: [],
-        enabledRules: [],
-        labelRules: [],
-        loadRules: [],
+        visibleRules: {
+          "all": [
+            {
+              "fact": "report",
+              "operator": "exists",
+              "value": "",
+              "path": "$.control.value"
+            }
+          ]
+        },
+        enabledRules: {
+          "all": [
+            {
+              "fact": "report",
+              "operator": "exists",
+              "value": "",
+              "path": "$.control.value"
+            }
+          ]
+        },
+        labelRules: null,
+        loadRules: {
+          "all": [
+            {
+              "fact": "report",
+              "operator": "exists",
+              "value": "",
+              "path": "$.control.value"
+            }
+          ]
+        },
       },
       {
-        name: "criteria",
+        name: "state",
         type: "select",
         multi: false,
-        label: ["Consortium", "State", "District", "School"],
+        label: ["State"],
         required: true,
         data: {
           pinboardGUID: "c9ac5220-aa49-49f8-a2c6-f729b9412fdb",
           param: {
-            name: "criteria"
+            name: "state"
           },
           type: "THOUGHTSPOT"
         },
         initialValue: "",
-        visibleRules: [],
-        enabledRules: [],
-        labelRules: [],
-        loadRules: [],
+        visibleRules: {
+          "all": [
+            {
+              "fact": "report",
+              "operator": "exists",
+              "value": "",
+              "path": "$.control.value"
+            },
+            {
+              "fact": "view",
+              "operator": "exists",
+              "value": "",
+              "path": "$.control.value"
+            }
+          ]
+        },
+        enabledRules: {
+          "all": [
+            {
+              "fact": "report",
+              "operator": "exists",
+              "value": "",
+              "path": "$.control.value"
+            },
+            {
+              "fact": "view",
+              "operator": "exists",
+              "value": "",
+              "path": "$.control.value"
+            }
+          ]
+        },
+        labelRules: null,
+        loadRules: {
+          "all": [
+            {
+              "fact": "report",
+              "operator": "exists",
+              "value": "",
+              "path": "$.control.value"
+            },
+            {
+              "fact": "view",
+              "operator": "exists",
+              "value": "",
+              "path": "$.control.value"
+            }
+          ]
+        },
       },
-
-
-      // {
-      //   name: "school",
-      //   type: "select",
-      //   multi: false,
-      //   label: "School",
-      //   required: true,
-      //   data: {
-      //     pinboardGUID: "985ad04f-165e-47fd-a227-b18a64ee8a00",
-      //     param: {
-      //       name: "school"
-      //     },
-      //     type: "THOUGHTSPOT"
-      //   },
-      //   initialValue: "",
-      //   visibleRules: [],
-      //   enabledRules: [],
-      //   load: [],
-      //   change: [],
-      //   handler: "WIDA_school"
-      // },
-      // {
-      //   name: "assessment",
-      //   type: "select",
-      //   multi: false,
-      //   label: "Assessment",
-      //   required: true,
-      //   data: {
-      //     pinboardGUID: "c9ac5220-aa49-49f8-a2c6-f729b9412999",
-      //     param: {
-      //       name: "assessment"
-      //     },
-      //     type: "THOUGHTSPOT"
-      //   },
-      //   initialValue: "",
-      //   visibleRules: [],
-      //   enabledRules: [],
-      //   load: [],
-      //   change: [],
-      // }
+      {
+        name: "district",
+        type: "select",
+        multi: false,
+        label: ["District"],
+        required: true,
+        data: {
+          pinboardGUID: "985ad04f-165e-47fd-a227-b18a64ee8444",
+          param: {
+            name: "district"
+          },
+          type: "THOUGHTSPOT"
+        },
+        initialValue: "",
+        visibleRules: {
+          "all": [
+            {
+              "fact": "report",
+              "operator": "exists",
+              "value": "",
+              "path": "$.control.value"
+            },
+            {
+              "fact": "view",
+              "operator": "exists",
+              "value": "",
+              "path": "$.control.value"
+            },
+            {
+              any: [
+                {
+                  "fact": "view",
+                  "operator": "equal",
+                  "value": "district",
+                  "path": "$.control.value"
+                },
+                {
+                  "fact": "view",
+                  "operator": "equal",
+                  "value": "school",
+                  "path": "$.control.value"
+                }
+              ]
+            }
+          ]
+        },
+        enabledRules: {
+          "all": [
+            {
+              "fact": "report",
+              "operator": "exists",
+              "value": "",
+              "path": "$.control.value"
+            },
+            {
+              "fact": "view",
+              "operator": "exists",
+              "value": "",
+              "path": "$.control.value"
+            },
+            {
+              "fact": "state",
+              "operator": "exists",
+              "value": "",
+              "path": "$.control.value"
+            }
+          ]
+        },
+        labelRules: null,
+        loadRules: {
+          "all": [
+            {
+              "fact": "report",
+              "operator": "exists",
+              "value": "",
+              "path": "$.control.value"
+            },
+            {
+              "fact": "view",
+              "operator": "exists",
+              "value": "",
+              "path": "$.control.value"
+            },
+            {
+              "fact": "state",
+              "operator": "exists",
+              "value": "",
+              "path": "$.control.value"
+            }
+          ]
+        },
+      },
+      {
+        name: "school",
+        type: "select",
+        multi: false,
+        label: ["School"],
+        required: true,
+        data: {
+          pinboardGUID: "985ad04f-165e-47fd-a227-b18a64ee8a00",
+          param: {
+            name: "school"
+          },
+          type: "THOUGHTSPOT"
+        },
+        initialValue: "",
+        visibleRules: {
+          "all": [
+            {
+              "fact": "report",
+              "operator": "exists",
+              "value": "",
+              "path": "$.control.value"
+            },
+            {
+              "fact": "view",
+              "operator": "exists",
+              "value": "",
+              "path": "$.control.value"
+            },
+            {
+              "fact": "view",
+              "operator": "equal",
+              "value": "school",
+              "path": "$.control.value"
+            }
+          ]
+        },
+        enabledRules: {
+          "all": [
+            {
+              "fact": "report",
+              "operator": "exists",
+              "value": "",
+              "path": "$.control.value"
+            },
+            {
+              "fact": "view",
+              "operator": "exists",
+              "value": "",
+              "path": "$.control.value"
+            },
+            {
+              "fact": "state",
+              "operator": "exists",
+              "value": "",
+              "path": "$.control.value"
+            },
+            {
+              "fact": "district",
+              "operator": "exists",
+              "value": "",
+              "path": "$.control.value"
+            }
+          ]
+        },
+        labelRules: null,
+        loadRules: {
+          "all": [
+            {
+              "fact": "report",
+              "operator": "exists",
+              "value": "",
+              "path": "$.control.value"
+            },
+            {
+              "fact": "view",
+              "operator": "exists",
+              "value": "",
+              "path": "$.control.value"
+            },
+            {
+              "fact": "state",
+              "operator": "exists",
+              "value": "",
+              "path": "$.control.value"
+            },
+            {
+              "fact": "district",
+              "operator": "exists",
+              "value": "",
+              "path": "$.control.value"
+            }
+          ]
+        },
+      },
     ]
   }
 };
-

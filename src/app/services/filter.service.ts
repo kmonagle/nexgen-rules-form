@@ -92,20 +92,20 @@ export class FilterService {
       filter.control.reset();
       filter.control.disable();
 
-      if(filter.config.visibleRules!.length === 0){
+      if(!filter.config.visibleRules){
         filter.visible = true;
       } else {
         //filter.visible = filter.config.visibleRules!.every(rule => this.getFilterByName(rule).control.value)
-        const rules = filter.config.visibleRules![0];
+        const rules = filter.config.visibleRules;
         obs.push(this.rs.runRules(rules).pipe(
           //tap(result => console.log('visible result: ', result, filter)),
           tap((result:boolean) => filter.visible = result )
         ))
       }
-      if(filter.config.enabledRules!.length === 0){
+      if(!filter.config.enabledRules){
         filter.enabled = true;
       } else {
-        const rules = filter.config.enabledRules![0];
+        const rules = filter.config.enabledRules;
         obs.push(this.rs.runRules(rules).pipe(
           //tap(result => console.log('enabled result: ', result, filter)),
           tap(result => {
@@ -115,8 +115,8 @@ export class FilterService {
           })
         ))
       }
-      if(filter.config.loadRules! && filter.config.loadRules!.length >= 1){
-        const rules = filter.config.loadRules![0];
+      if(filter.config.loadRules){
+        const rules = filter.config.loadRules;
         obs.push(this.rs.runRules(rules).pipe(
           tap(result => console.log('load result: ', result, filter)),
           tap(result => {

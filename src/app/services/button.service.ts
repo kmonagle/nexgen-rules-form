@@ -31,14 +31,18 @@ export class ButtonService {
         const obs:Observable<any>[] = [];
 
         this._buttons.forEach(button => {
-          let rules = button.config.enabledRules![0];
-          obs.push(this.rs.runRules(rules).pipe(
-            tap(result => button.enabled = result)
-          ));
-          rules = button.config.visibleRules![0];
-          obs.push(this.rs.runRules(rules).pipe(
-            tap(result => button.visible = result)
-          ));
+          if(button.config.enabledRules){
+            let rules = button.config.enabledRules;
+            obs.push(this.rs.runRules(rules).pipe(
+              tap(result => button.enabled = result)
+            ));
+          }
+          if(button.config.visibleRules){
+            let rules = button.config.visibleRules;
+            obs.push(this.rs.runRules(rules).pipe(
+              tap(result => button.visible = result)
+            ));
+          }
         });
         combineLatest(obs).pipe(take(1)).subscribe(() => {
           this._buttonSubject.next(this._buttons);

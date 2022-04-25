@@ -1,11 +1,11 @@
 import { Injectable } from '@angular/core';
 import {FactService} from './fact.service';
 import {Observable} from 'rxjs/internal/Observable';
-import {Engine} from 'json-rules-engine';
+import {Engine, TopLevelCondition} from 'json-rules-engine';
 import {of} from 'rxjs/internal/observable/of';
 import {from} from 'rxjs/internal/observable/from';
 import {catchError, map, mergeMap, tap} from 'rxjs/operators';
-import {BehaviorSubject, combineLatest, forkJoin, throwError} from 'rxjs/index';
+import {throwError} from 'rxjs/index';
 
 @Injectable({
   providedIn: 'root'
@@ -16,17 +16,16 @@ export class RulesService {
     //fs.fact.subscribe(fact => console.log("got fact: ", fact));
   }
 
-  runRules(rules: any): Observable<boolean>{
-    if(!rules) return of(true)
+  runRules(conditions: TopLevelCondition): Observable<boolean>{
+    if(!conditions) return of(true)
     const engine: Engine = new Engine();
     engine.addOperator('exists', (factValue: string[]) => {
       if (!factValue || !factValue.length) return false;
       return !!factValue[0].toLowerCase();
     });
-    engine.addRule(rules);
+    engine.addRule(this.getRule(conditions));
     return this.fs.fact.pipe(
       mergeMap((facts) => from(engine.run(facts!).then((res) => {
-        //console.log("n merge map: ", res);
         return res.events.length >= 1;
       }))),
       map(res => res),
@@ -35,5 +34,17 @@ export class RulesService {
         return throwError(err);
       })
     );
+  }
+
+  getRule(conditions: TopLevelCondition){
+    return {
+      conditions: conditions,
+      event: {  // define the event to fire when the conditions evaluate truthy
+        type: 'haveValue',
+        params: {
+          message: 'Report has a value!'
+        }
+      }
+    }
   }
 }
