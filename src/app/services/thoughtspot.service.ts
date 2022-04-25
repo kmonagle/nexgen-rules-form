@@ -24,8 +24,13 @@ export class ThoughtspotService {
 
     if (guid === '78c5a246-b6a6-49aa-aa16-b4340957b78c') {
       return of([
-        {key: "rep1", value: "Cumulative"},
-        {key: "rep2", value: "Concurrent"},
+        {key: "cumulative", value: "Cumulative"},
+        {key: "concurrent", value: "Concurrent"},
+      ]);
+    } if (guid === '78c5a246-b6a6-49aa-aa16-b4340957zzzz') {
+      return of([
+        {key: "admin1", value: "Admin 1"},
+        {key: "admin2", value: "Admin 2"},
       ]);
     } else if (guid === 'f1a77437-b6d3-406f-9982-5d600bb09dd6') {
       return of([
