@@ -1,6 +1,4 @@
 import {ButtonConfig} from './interfaces';
-import {FilterService} from '../services/filter.service';
-import {ButtonService} from '../services/button.service';
 
 export class Button{
 
@@ -10,7 +8,7 @@ export class Button{
   enabled: boolean;
   label: string;
 
-  constructor(buttonConfig: ButtonConfig, private bs: ButtonService, private fs: FilterService){
+  constructor(buttonConfig: ButtonConfig){
     this.name = buttonConfig.name;
     this.config = buttonConfig;
     this.label = buttonConfig.label;

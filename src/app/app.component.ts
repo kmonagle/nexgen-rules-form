@@ -22,6 +22,7 @@ export class AppComponent{
 
   constructor(private filterService: FilterService, private buttonService: ButtonService){
     this.filters$ = filterService.filters;
+    this.filters$.subscribe(filters => console.log("app component got filters: ", filters));
     this.buttons$ = buttonService.buttons;
   }
 

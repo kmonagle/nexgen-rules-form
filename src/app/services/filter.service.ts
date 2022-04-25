@@ -1,11 +1,11 @@
 import { Injectable } from '@angular/core';
-import {FilterConfig} from '../model/interfaces';
 import {tap, filter, take, skip, mergeMap} from 'rxjs/operators';
 import {Filter} from '../model/Filter';
-import {BehaviorSubject, forkJoin, Observable} from 'rxjs/index';
+import {BehaviorSubject, combineLatest, forkJoin, Observable} from 'rxjs/index';
 import {DataService} from './data.service';
 import {ConfigurationService} from './configuration.service';
 import {getFacts, runRules} from '../helper/rules';
+import {RulesService} from './rules.service';
 
 @Injectable({
   providedIn: 'root'
@@ -20,22 +20,22 @@ export class FilterService {
 
   private _filters: Filter[] = [];
 
-  constructor(private ds: DataService, cs: ConfigurationService) {
+  constructor(private ds: DataService, cs: ConfigurationService, private rs: RulesService) {
 
-    // init, create filters, wire up listeners, load first field, do the initial rule run
-    cs.config.pipe(
-      take(1), //do it once!!
-      tap(config => {
-        config!.form.fields.forEach((filterConfig: FilterConfig, idx:number) => {
-          const filter2 = new Filter(filterConfig, idx);
-          this._filters.push(filter2);
-          filter2.control.valueChanges.pipe(
+    cs.filters.pipe(
+      filter(filters => !! filters),
+      tap(filters => console.log("got filters in filter: ", filters)),
+      take(1),
+      tap(filters => this._filters = filters!),
+      tap(filters => {
+        filters!.forEach(flt => {
+          flt.control.valueChanges.pipe(
             filter(val => !!val),
-            tap(() => this._filterChangeSubject.next(filter2))
+            tap(() => this._filterChangeSubject.next(flt))
           ).subscribe();
-        });
-        this._filterSubject.next(this._filters);
+        })
       }),
+      tap(() => this._filterSubject.next(this._filters)),
       mergeMap(() => {
         // init first field
         return this.ds.getData(this.getFirst(), []).pipe(
@@ -45,7 +45,8 @@ export class FilterService {
       tap(() => {
         this.resetIsCurrent(this.getFirst()); //set first to current
         let obs: Observable<any>[] = this.runFilters(this.getFirst());
-        forkJoin(obs).subscribe(() => {}, () => {}, () => this._filterSubject.next(this._filters));
+        console.log("obs: ", obs);
+        combineLatest(obs).pipe(take(1)).subscribe((res) => {console.log("filter init res: ", res)}, () => {}, () => this._filterSubject.next(this._filters));
       })
     ).subscribe();
 
@@ -54,7 +55,7 @@ export class FilterService {
       tap(filter => {
         this.resetIsCurrent(filter!);
         let obs: Observable<any>[] = this.runFilters(filter!);
-        forkJoin(obs).subscribe(() => {}, () => {}, () => this._filterSubject.next(this._filters));
+        combineLatest(obs).pipe(take(1)).subscribe(() => {}, () => {}, () => this._filterSubject.next(this._filters));
       }),
     ).subscribe();
   }
@@ -82,7 +83,7 @@ export class FilterService {
 
   runFilters(filter: Filter): Observable<any>[]{
     const obs:Observable<any>[] = [];
-    const facts = getFacts(this._filters);
+    //const facts = getFacts(this._filters);
 
     let filters = this.getLatter(filter);
 
@@ -96,7 +97,8 @@ export class FilterService {
       } else {
         //filter.visible = filter.config.visibleRules!.every(rule => this.getFilterByName(rule).control.value)
         const rules = filter.config.visibleRules![0];
-        obs.push(runRules(rules,facts).pipe(
+        obs.push(this.rs.runRules(rules).pipe(
+          tap(result => console.log('visible result: ', result, filter)),
           tap((result:boolean) => filter.visible = result )
         ))
       }
@@ -104,7 +106,8 @@ export class FilterService {
         filter.enabled = true;
       } else {
         const rules = filter.config.enabledRules![0];
-        obs.push(runRules(rules,facts).pipe(
+        obs.push(this.rs.runRules(rules).pipe(
+          tap(result => console.log('enabled result: ', result, filter)),
           tap(result => {
             if(result && filter.control.disabled){
               filter.control.enable();
@@ -114,8 +117,8 @@ export class FilterService {
       }
       if(filter.config.load! && filter.config.load!.length >= 1){
         const rules = filter.config.load![0];
-        obs.push(runRules(rules,facts).pipe(
-          //tap(result => console.log('load result: ', result, filter)),
+        obs.push(this.rs.runRules(rules).pipe(
+          tap(result => console.log('load result: ', result, filter)),
           tap(result => {
             if(result){
               this.ds.getData(filter, this.getFormer(filter)).pipe(
