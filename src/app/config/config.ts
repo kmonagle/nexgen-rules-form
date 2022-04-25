@@ -25,7 +25,7 @@ export const config = {
         name: "report",
         type: "select",
         multi: false,
-        label: "Report",
+        label: ["Report"],
         required: true,
         data: {
           pinboardGUID: "78c5a246-b6a6-49aa-aa16-b4340957b78c",
@@ -37,15 +37,15 @@ export const config = {
         initialValue: "",
         visibleRules: [],
         enabledRules: [],
-        change: [],
+        labelRules: [],
         handler: "alt",
-        load: [],
+        loadRules: [],
       },
       {
         name: "view",
         type: "select",
         multi: false,
-        label: "View",
+        label: ["View"],
         required: true,
         data: {
           pinboardGUID: "f1a77437-b6d3-406f-9982-5d600bb09dd6",
@@ -57,28 +57,29 @@ export const config = {
         initialValue: "",
         visibleRules: [],
         enabledRules: [],
-        load: [],
-        change: [],
+        labelRules: [],
+        loadRules: [],
       },
       {
         name: "criteria",
         type: "select",
         multi: false,
-        label: "Criteria",
+        label: ["Consortium", "State", "District", "School"],
         required: true,
         data: {
           pinboardGUID: "c9ac5220-aa49-49f8-a2c6-f729b9412fdb",
           param: {
-            name: "district"
+            name: "criteria"
           },
           type: "THOUGHTSPOT"
         },
         initialValue: "",
         visibleRules: [],
         enabledRules: [],
-        load: [],
-        change: [],
+        labelRules: [],
+        loadRules: [],
       },
+
 
       // {
       //   name: "school",

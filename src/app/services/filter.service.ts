@@ -61,7 +61,7 @@ export class FilterService {
   }
 
   getFormer(filter: Filter): Filter[]{
-    return this._filters.slice(0,(filter.index + 1));
+    return this._filters.slice(0,(filter.index));
   }
 
   getLatter(filter: Filter): Filter[]{
@@ -98,7 +98,7 @@ export class FilterService {
         //filter.visible = filter.config.visibleRules!.every(rule => this.getFilterByName(rule).control.value)
         const rules = filter.config.visibleRules![0];
         obs.push(this.rs.runRules(rules).pipe(
-          tap(result => console.log('visible result: ', result, filter)),
+          //tap(result => console.log('visible result: ', result, filter)),
           tap((result:boolean) => filter.visible = result )
         ))
       }
@@ -107,7 +107,7 @@ export class FilterService {
       } else {
         const rules = filter.config.enabledRules![0];
         obs.push(this.rs.runRules(rules).pipe(
-          tap(result => console.log('enabled result: ', result, filter)),
+          //tap(result => console.log('enabled result: ', result, filter)),
           tap(result => {
             if(result && filter.control.disabled){
               filter.control.enable();
@@ -115,8 +115,8 @@ export class FilterService {
           })
         ))
       }
-      if(filter.config.load! && filter.config.load!.length >= 1){
-        const rules = filter.config.load![0];
+      if(filter.config.loadRules! && filter.config.loadRules!.length >= 1){
+        const rules = filter.config.loadRules![0];
         obs.push(this.rs.runRules(rules).pipe(
           tap(result => console.log('load result: ', result, filter)),
           tap(result => {
@@ -131,6 +131,19 @@ export class FilterService {
                 })
               ).subscribe()
             }
+          })
+        ));
+      }
+      if(filter.config.labelRules! && filter.config.labelRules!.length >= 1){
+        const rules = filter.config.labelRules!;
+        console.log('label rules: ', rules);
+        const ruleRuns = rules.map(rule => this.rs.runRules(rule));
+        console.log('ruleRuns: ', ruleRuns);
+        obs.push(combineLatest(ruleRuns).pipe(
+          tap(runResults => console.log("label run results: ", runResults)),
+          tap(runResults => {
+            const idx = runResults.indexOf(true);
+            filter.label = filter.config.label[idx];
           })
         ));
       }

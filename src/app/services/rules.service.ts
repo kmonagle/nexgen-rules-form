@@ -4,8 +4,8 @@ import {Observable} from 'rxjs/internal/Observable';
 import {Engine} from 'json-rules-engine';
 import {of} from 'rxjs/internal/observable/of';
 import {from} from 'rxjs/internal/observable/from';
-import {map, mergeMap, tap} from 'rxjs/operators';
-import {BehaviorSubject, combineLatest, forkJoin} from 'rxjs/index';
+import {catchError, map, mergeMap, tap} from 'rxjs/operators';
+import {BehaviorSubject, combineLatest, forkJoin, throwError} from 'rxjs/index';
 
 @Injectable({
   providedIn: 'root'
@@ -26,10 +26,14 @@ export class RulesService {
     engine.addRule(rules);
     return this.fs.fact.pipe(
       mergeMap((facts) => from(engine.run(facts!).then((res) => {
-        console.log("n merge map: ", res);
+        //console.log("n merge map: ", res);
         return res.events.length >= 1;
       }))),
-      map(res => res)
+      map(res => res),
+      catchError(err => {
+        console.log(err);
+        return throwError(err);
+      })
     );
   }
 }

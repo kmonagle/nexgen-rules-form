@@ -30,11 +30,15 @@ export class ConfigurationService {
   constructor() {
     (config.form.fields[1].enabledRules as any).push(this.haveValueRule(["report"])); //admin
     (config.form.fields[1].visibleRules as any).push(this.haveValueRule(["report"])); //admin
-    (config.form.fields[1].load as any).push(this.haveValueRule(["report"])); //admin
+    (config.form.fields[1].loadRules as any).push(this.haveValueRule(["report"])); //admin
 
     (config.form.fields[2].enabledRules as any).push(this.haveValueRule(["report", "view"])); //district
     (config.form.fields[2].visibleRules as any).push(this.haveValueRule(["report", "view"])); //district
-    (config.form.fields[2].load as any).push(this.haveValueRule(["report", "view"])); //admin
+    (config.form.fields[2].loadRules as any).push(this.haveValueRule(["report", "view"])); //admin
+    (config.form.fields[2].labelRules as any).push(this.valueEqualsRule("view", "consortium"));
+    (config.form.fields[2].labelRules as any).push(this.valueEqualsRule("view", "state"));
+    (config.form.fields[2].labelRules as any).push(this.valueEqualsRule("view", "district"));
+    (config.form.fields[2].labelRules as any).push(this.valueEqualsRule("view", "school"));
 
     (config.form.buttons[0].enabledRules as any).push(this.haveValueRule(["report", "view", "criteria"])); //school
     (config.form.buttons[0].visibleRules as any).push(this.haveValueRule(["report", "view", "criteria"])); //school
@@ -84,6 +88,29 @@ export class ConfigurationService {
           message: 'Report has a value!'
         }
       }
+    }
+  }
+
+  valueEqualsRule(name: string, value: string){
+    return {
+      conditions: {
+        all: [this.valueEqualsCondition(name, value)]
+      },
+      event: {  // define the event to fire when the conditions evaluate truthy
+        type: 'haveValue',
+        params: {
+          message: 'Report has a value!'
+        }
+      }
+    }
+  }
+
+  valueEqualsCondition(name: string, value: string){
+    return {
+      fact: name,
+      operator: 'equal',
+      value: value,
+      path: '$.control.value'
     }
   }
 

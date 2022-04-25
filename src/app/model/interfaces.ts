@@ -28,14 +28,15 @@ export interface FilterConfig {
   name: string;
   type: string,
   multi: boolean,
-  label: string,
+  label: string[],
   required: boolean,
   data: FormFieldData;
   initialValue: string;
   handler?: string;
   enabledRules?: any[];
   visibleRules?: any[];
-  load?: any[];
+  labelRules?: any[];
+  loadRules?: any[];
   change?: any[]
 }
 
